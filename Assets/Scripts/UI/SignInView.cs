@@ -1,21 +1,65 @@
 using System;
-using TMPro;
+using Supabase.Gotrue.Exceptions;
 using UnityEngine;
 
 public class SignInView : View
 {
-    public InputFieldHandler EmailInputField;
-    public InputFieldHandler PasswordInputField;
+    [Header("Inputs")]
+    public InputFieldHandler Email;
+    public InputFieldHandler Password;
+
+    [Header("Feedback")]
+    public FormFeedbackText Feedback;
 
     public void SignIn()
     {
+        ResetFeedback();
+
+        if (HasError()) return;
+
         try
         {
-            SupabaseClient.SignInUser(EmailInputField.Text, PasswordInputField.Text);
+            SupabaseClient.SignInUser(Email.Text, Password.Text);
+            ResetInput();
+            Debug.Log("Signed up");
         }
-        catch (Exception e)
+        catch (GotrueException e)
         {
             Debug.Log(e.Message);
         }
+    }
+
+    private bool HasError()
+    {
+        bool error = false;
+
+        if (Email.Text == "")
+        {
+            Email.SetFeedback("Mangler email");
+            error = true;
+        }
+        if (Password.Text == "")
+        {
+            Password.SetFeedback("Mangler kodeord");
+            error = true;
+        }
+
+        UpdateUI();
+
+        return error;
+    }
+
+    private void ResetFeedback()
+    {
+        Email.ResetFeedback();
+        Password.ResetFeedback();
+        Feedback.ResetText();
+    }
+
+    private void ResetInput()
+    {
+        Email.ResetInput();
+        Password.ResetInput();
+        Feedback.ResetText();
     }
 }

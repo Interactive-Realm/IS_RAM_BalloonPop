@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class View : MonoBehaviour
 {
-    public void Hide()
+    private RectTransform _rectTransform;
+
+    public void Start()
     {
-        enabled = false;
+        _rectTransform = GetComponent<RectTransform>();
     }
 
-    public void Show()
+    public void UpdateUI()
     {
-        enabled = true;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_rectTransform);
     }
 }

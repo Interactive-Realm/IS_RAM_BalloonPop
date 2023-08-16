@@ -4,9 +4,10 @@ using UnityEngine;
 using Postgrest.Models;
 using Postgrest.Attributes;
 
-public class UserInfo : BaseModel
+[Table("profiles")]
+public class Profile : BaseModel
 {
-    [PrimaryKey("id", false)]
+    [PrimaryKey("user_id")]
     public string Id { get; set; }
 
     [Column("first_name")]
@@ -18,4 +19,3 @@ public class UserInfo : BaseModel
     [Column("highscore")]
     public int Highscore { get; set; }
 }
-

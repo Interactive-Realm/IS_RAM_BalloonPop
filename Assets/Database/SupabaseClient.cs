@@ -1,19 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
-using Postgrest.Exceptions;
 using Supabase.Gotrue;
-using Supabase.Gotrue.Exceptions;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using Client = Supabase.Client;
 
 public class SupabaseClient
 {
-    private static string SUPABASE_URL = "";
-    private static string SUPABASE_PUBLIC_KEY = "";
+    private static string SUPABASE_URL = "https://ddzsyoprxvtzmszkkjap.supabase.co";
+    private static string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkenN5b3ByeHZ0em1zemtramFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTIxMjUwNDMsImV4cCI6MjAwNzcwMTA0M30.LblAPe5fhfeSAQ1YFDqpHLddgsvn6fpoacr7AgsEmBY";
     private static readonly Client _instance;
     public static Client Instance => _instance;
 
@@ -31,18 +24,18 @@ public class SupabaseClient
         try
         {
             Session session = await Instance.Auth.SignUp(email, password);
-            UserInfo userInfo = new UserInfo
+            Profile profile = new Profile
             {
                 Id = session.User.Id,
                 FirstName = firstName,
                 LastName = lastName,
                 Highscore = highscore
             };
-            await Instance.From<UserInfo>().Insert(userInfo);
+            await Instance.From<Profile>().Insert(profile);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.Log(e.Message);
+            throw;
         }
     }
 
@@ -52,28 +45,37 @@ public class SupabaseClient
         {
             Session session = await Instance.Auth.SignInWithPassword(email, password);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.Log(e.Message);
+            throw;
         }
     }
 
     public static async void SignOutUser()
     {
-        await Instance.Auth.SignOut();
+        try
+        {
+            await Instance.Auth.SignOut();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public static async void SetHighscore(int highscore)
     {
-        await Instance
-            .From<UserInfo>()
-            .Where(x => x.Id == Instance.Auth.CurrentSession.User.Id)
-            .Set(x => x.Highscore, highscore)
-            .Update();
-    }
-
-    public static async void GetUserFullName()
-    {
-       
+        try
+        {
+            await Instance
+                .From<Profile>()
+                .Where(x => x.Id == Instance.Auth.CurrentSession.User.Id)
+                .Set(x => x.Highscore, highscore)
+                .Update();
+        }
+        catch (Exception e)
+        {
+            throw;
+        }
     }
 }
