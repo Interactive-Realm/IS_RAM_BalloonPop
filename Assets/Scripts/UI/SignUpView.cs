@@ -16,7 +16,7 @@ public class SignUpView : View
     [Header("Feedback")]
     public FormFeedbackText Feedback;
 
-    public void SignUp()
+    public async void SignUp()
     {
         ResetFeedback();
 
@@ -24,11 +24,15 @@ public class SignUpView : View
 
         try
         {
-            SupabaseClient.SignUpUser(Email.Text, Password.Text, Phone.Text, FirstName.Text, LastName.Text, 0);
+            await SupabaseClient.SignUpUser(Email.Text, Password.Text, Phone.Text, FirstName.Text, LastName.Text, 0);
             ResetInput();
             Debug.Log("Logged in");
         }
         catch (GotrueException e)
+        {
+            Feedback.SetText(e.Message);
+        }
+        catch (Exception e)
         {
             Feedback.SetText(e.Message);
         }

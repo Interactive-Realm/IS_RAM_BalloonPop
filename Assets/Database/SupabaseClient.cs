@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Supabase.Gotrue;
 using UnityEngine;
 using Client = Supabase.Client;
@@ -19,48 +21,32 @@ public class SupabaseClient
         }
     }
 
-    public static async void SignUpUser(string email, string password, string phone, string firstName, string lastName, int highscore)
+    public static async Task<Session> SignUpUser(string email, string password, string phone, string firstName, string lastName, int highscore)
     {
-        try
+        // Create user metadata
+        SignUpOptions options = new SignUpOptions
         {
-            Session session = await Instance.Auth.SignUp(email, password);
-            Profile profile = new Profile
+            FlowType = Constants.OAuthFlowType.Implicit,
+            Data = new Dictionary<string, object>
             {
-                Id = session.User.Id,
-                FirstName = firstName,
-                LastName = lastName,
-                Highscore = highscore
-            };
-            await Instance.From<Profile>().Insert(profile);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+                { "first_name", firstName },
+                { "last_name", lastName },
+                { "highscore", highscore }
+            }
+        };
+
+        // Sign up
+        return await Instance.Auth.SignUp(email, password, options);
     }
 
-    public static async void SignInUser(string email, string password)
+    public static async Task<Session?> SignInUser(string email, string password)
     {
-        try
-        {
-            Session session = await Instance.Auth.SignInWithPassword(email, password);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        return await Instance.Auth.SignInWithPassword(email, password);
     }
 
     public static async void SignOutUser()
     {
-        try
-        {
-            await Instance.Auth.SignOut();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        await Instance.Auth.SignOut();
     }
 
     public static async void SetHighscore(int highscore)
@@ -73,7 +59,7 @@ public class SupabaseClient
                 .Set(x => x.Highscore, highscore)
                 .Update();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw;
         }

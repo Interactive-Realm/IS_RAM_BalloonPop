@@ -11,7 +11,7 @@ public class SignInView : View
     [Header("Feedback")]
     public FormFeedbackText Feedback;
 
-    public void SignIn()
+    public async void SignIn()
     {
         ResetFeedback();
 
@@ -19,7 +19,7 @@ public class SignInView : View
 
         try
         {
-            SupabaseClient.SignInUser(Email.Text, Password.Text);
+            await SupabaseClient.SignInUser(Email.Text, Password.Text);
             ResetInput();
             Debug.Log("Signed up");
         }
