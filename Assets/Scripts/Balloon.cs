@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnBalloon : MonoBehaviour
+public class Balloon : MonoBehaviour
 {
-    public GameObject balloonObject;
-
+    [SerializeField]
+    private float speed;
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(balloonObject, this.gameObject.transform);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        transform.position += Vector3.up * speed * Time.deltaTime;
     }
 }
