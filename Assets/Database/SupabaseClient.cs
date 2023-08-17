@@ -51,17 +51,10 @@ public class SupabaseClient
 
     public static async void SetHighscore(int highscore)
     {
-        try
-        {
-            await Instance
-                .From<Profile>()
-                .Where(x => x.Id == Instance.Auth.CurrentSession.User.Id)
-                .Set(x => x.Highscore, highscore)
-                .Update();
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        await Instance
+            .From<Profile>()
+            .Where(x => x.Id == Instance.Auth.CurrentSession.User.Id)
+            .Set(x => x.Highscore, highscore)
+            .Update();
     }
 }
