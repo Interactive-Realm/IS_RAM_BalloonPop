@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Balloon : MonoBehaviour
@@ -16,5 +17,14 @@ public class Balloon : MonoBehaviour
     void Update()
     {
         transform.position += Vector3.up * speed * Time.deltaTime;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Wall")
+        {
+            Destroy(gameObject);
+        }
+        
     }
 }
