@@ -29,6 +29,8 @@ public class SupabaseClient
             FlowType = Constants.OAuthFlowType.Implicit,
             Data = new Dictionary<string, object>
             {
+                { "email", email },
+                { "phone", phone },
                 { "first_name", firstName },
                 { "last_name", lastName },
                 { "highscore", highscore }

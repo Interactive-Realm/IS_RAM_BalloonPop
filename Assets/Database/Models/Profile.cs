@@ -10,6 +10,12 @@ public class Profile : BaseModel
     [PrimaryKey("user_id")]
     public string Id { get; set; }
 
+    [Column("email")]
+    public string Email { get; set; }
+
+    [Column("phone")]
+    public string Phone { get; set; }
+
     [Column("first_name")]
     public string FirstName { get; set; }
 
