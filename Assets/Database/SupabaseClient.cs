@@ -9,6 +9,7 @@ using UnityEngine;
 using Client = Supabase.Client;
 using Postgrest.Exceptions;
 using Newtonsoft.Json;
+using Supabase.Interfaces;
 
 public class SupabaseClient
 {
@@ -56,28 +57,26 @@ public class SupabaseClient
         await Instance.Auth.SignOut();
     }
 
-    public static async Task<List<Profile>> GetTopTenHighscores()
+    public static async Task<List<Profile>> GetTopHighscores(int limit)
     {
-        Task<BaseResponse> rpc = Instance.Rpc("get_top_ten_highscores", null);
-        rpc.AsUniTask().GetAwaiter();
-        try
-        {
-            await rpc;
-        }
-        catch (PostgrestException)
-        {
-            throw;
-        }
-
-        if (rpc.IsCompleted)
-        {
-            return JsonConvert.DeserializeObject<List<Profile>>(rpc.Result.Content);
-        }
-
-        return null;
+        ModeledResponse<Profile> response = await Instance
+            .From<Profile>()
+            .Order("highscore", Postgrest.Constants.Ordering.Descending)
+            .Limit(limit)
+            .Get();
+        return response.Models;
     }
 
-    public static async void SetHighscore(int highscore)
+    public static async Task<Profile> GetUserProfile()
+    {
+        ModeledResponse<Profile> response = await Instance
+            .From<Profile>()
+            .Where(x => x.Id == Instance.Auth.CurrentUser.Id)
+            .Get();
+        return response.Model;
+    }
+
+    public static async void UpdateHighscore(int highscore)
     {
         await Instance
             .From<Profile>()

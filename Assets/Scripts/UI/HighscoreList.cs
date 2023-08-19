@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Postgrest.Responses;
 using UnityEngine;
 using UnityEngine.Profiling;
 
@@ -10,7 +11,8 @@ public class HighscoreList : MonoBehaviour
 
     public async void Start()
     {
-        List<Profile> profiles = await SupabaseClient.GetTopTenHighscores();
+        // List<Profile> profiles =  await SupabaseClient.GetTopTenHighscores();
+        List<Profile> profiles = await SupabaseClient.GetTopHighscores(10);
 
         // Delete children
         List<GameObject> children = new List<GameObject>();
