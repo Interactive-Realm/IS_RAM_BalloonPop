@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Supabase.Gotrue;
+using Postgrest.Responses;
 using UnityEngine;
 using Client = Supabase.Client;
+using Postgrest.Exceptions;
+using Newtonsoft.Json;
 
 public class SupabaseClient
 {
@@ -49,6 +54,27 @@ public class SupabaseClient
     public static async void SignOutUser()
     {
         await Instance.Auth.SignOut();
+    }
+
+    public static async Task<List<Profile>> GetTopTenHighscores()
+    {
+        Task<BaseResponse> rpc = Instance.Rpc("get_top_ten_highscores", null);
+        rpc.AsUniTask().GetAwaiter();
+        try
+        {
+            await rpc;
+        }
+        catch (PostgrestException)
+        {
+            throw;
+        }
+
+        if (rpc.IsCompleted)
+        {
+            return JsonConvert.DeserializeObject<List<Profile>>(rpc.Result.Content);
+        }
+
+        return null;
     }
 
     public static async void SetHighscore(int highscore)
