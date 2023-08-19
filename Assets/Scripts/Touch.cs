@@ -7,10 +7,12 @@ public class Touch : MonoBehaviour
 {
     private Camera _mainCamera;
     private Vector3 position;
+    public int _points;
 
     void Awake()
     {
         _mainCamera = Camera.main;
+        _points = 0;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -26,7 +28,12 @@ public class Touch : MonoBehaviour
 
         if (!rayHit.collider) return;
         Debug.Log(rayHit.collider.gameObject.name);
-        Destroy(rayHit.collider.gameObject);
+        if (rayHit.collider.gameObject.tag == "Balloon")
+        {
+            _points = _points + 1;
+            Destroy(rayHit.collider.gameObject);
+        }
+
         
     }
 }
