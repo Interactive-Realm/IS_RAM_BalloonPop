@@ -5,6 +5,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
+// Game States Enum
+public enum GameState
+{
+    SignUp,
+    Login,
+    GameStart,
+    Playing,
+    Paused,
+    GameEnd,
+}
+
+// Game Manager
 public class GameManager : MonoBehaviour
 {
     // Creates an instance of Game Manager
@@ -38,11 +51,12 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        // Define instance reference & make it indestructable
         _instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(this.gameObject); 
     }
 
-        void Update()
+    void Update()
     {
         if(time.timeIsRunning == false)
         {
@@ -50,14 +64,75 @@ public class GameManager : MonoBehaviour
             _gameEnd.gameObject.SetActive(true);
         }
     }
+
+
+    void Start()
+    {
+        //Game Initial State
+        UpdateGameState(GameState.SignUp);
+    }
+
+    public void UpdateGameState(GameState newState)
+    {
+        State = newState;
+
+        switch (newState)
+        {
+            case GameState.SignUp:
+                HandleSignUp();
+                break;
+
+            case GameState.Login:
+                HandleLogin();
+                break;
+
+            case GameState.GameStart:
+                HandleStartRound();
+                break;
+
+            case GameState.Playing:
+                HandlePlayingGame();
+                break;
+
+            case GameState.Paused:
+                HandlePauseGame();
+                break;
+
+            case GameState.GameEnd:
+                break;
+
+            default:
+                break;
+        }
+
+        OnGameStateChanged?.Invoke(newState);
+    }
+
+
+    public void HandleSignUp()
+    {
+
+    }
+
+    public void HandleLogin()
+    {
+
+    }
+
+    public void HandleStartRound()
+    {
+        
+    }
+
+    public void HandlePlayingGame()
+    {
+        Time.timeScale = 1f;
+    }
+
+    public void HandlePauseGame()
+    {
+        Time.timeScale = 0f;
+    }
 }
 
-public enum GameState
-{
-        MainMenu,
-        Start,
-        Playing,
-        Paused,
-        Won,
-        Lost,
-}
+
