@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spwaner : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
     
     [SerializeField]
@@ -10,7 +10,6 @@ public class Spwaner : MonoBehaviour
     private Vector2 screenBounds;
     private float objectWidth;
     private float objectHeight;
-
     private float currentTime;
 
     private Vector3 viewPos;
