@@ -23,7 +23,7 @@ public class Points : MonoBehaviour
            if (gameTime > 0)
             {
                 gameTime -= Time.deltaTime;
-                Debug.Log(_points.GetComponent<Touch>()._points);
+                //Debug.Log(_points.GetComponent<Touch>()._points);
                 DisplayPoints();
             }
             else
