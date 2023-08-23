@@ -14,7 +14,7 @@ public class Timer : MonoBehaviour
 
     void Start()
     {
-        timeIsRunning = true;
+
     }
 
     void Update()
@@ -30,9 +30,10 @@ public class Timer : MonoBehaviour
             }
             else
             {
-                Debug.Log("time out");
+                Debug.Log("Time Out!");
                 gameTime = 0;
                 timeIsRunning = false;
+                GameManager.Instance.UpdateGameState(GameState.GameEnd);
             } 
         }
     }

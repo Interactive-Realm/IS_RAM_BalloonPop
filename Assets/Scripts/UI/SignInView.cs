@@ -21,7 +21,8 @@ public class SignInView : View
         {
             await SupabaseClient.SignInUser(Email.Text, Password.Text);
             ResetInput();
-            Debug.Log("Signed up");
+            Debug.Log("Logged In");
+            GameManager.Instance.UpdateGameState(GameState.GameStart);
         }
         catch (GotrueException e)
         {

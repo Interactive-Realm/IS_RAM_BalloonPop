@@ -39,13 +39,16 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField]
-    private Canvas _gameEnd;
+    private Canvas canvas;
     [SerializeField]
     private Timer time;
     [SerializeField]
     private Spawner spawner;
     [SerializeField]
     private Points points;
+
+    GameObject LoginScreen;
+    GameObject EndScreen;
 
     static int _higScore;
 
@@ -60,16 +63,17 @@ public class GameManager : MonoBehaviour
     {
         if(time.timeIsRunning == false)
         {
-            spawner.gameObject.SetActive(false);
-            _gameEnd.gameObject.SetActive(true);
+            
         }
     }
 
 
     void Start()
     {
+
         //Game Initial State
-        UpdateGameState(GameState.SignUp);
+        UpdateGameState(GameState.Login);
+
     }
 
     public void UpdateGameState(GameState newState)
@@ -79,7 +83,7 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.SignUp:
-                HandleSignUp();
+                HandleLogin();
                 break;
 
             case GameState.Login:
@@ -99,6 +103,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.GameEnd:
+                HandleEndGame();
                 break;
 
             default:
@@ -109,19 +114,16 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void HandleSignUp()
-    {
-
-    }
-
     public void HandleLogin()
     {
-
+        LoginScreen = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Authentication"), canvas.transform);
     }
 
     public void HandleStartRound()
     {
-        
+        Destroy(LoginScreen);
+        spawner.gameObject.SetActive(true);
+        time.timeIsRunning = true;
     }
 
     public void HandlePlayingGame()
@@ -133,6 +135,14 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
     }
+
+    public void HandleEndGame()
+    {
+        spawner.gameObject.SetActive(false);
+        EndScreen = Instantiate(Resources.Load<GameObject>("Prefabs/UI/EndScreen"), canvas.transform);
+    }
+
+    
 }
 
 
