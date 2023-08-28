@@ -22,7 +22,6 @@ public class HighscoreList : MonoBehaviour
         // Create highscore list items
         if (profiles != null)
         {
-            Debug.Log(profiles.ToString());
             for (int i = 0; i < profiles.Count; i++)
             {
                 Profile profile = profiles[i];

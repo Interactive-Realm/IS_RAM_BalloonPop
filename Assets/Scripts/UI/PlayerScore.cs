@@ -18,8 +18,21 @@ public class PlayerScore : MonoBehaviour
         }
         else
         {
-            Profile profile = await SupabaseClient.GetUserProfile();
-            Highscore.text = profile.Highscore.ToString();
+            // TODO - Maybe move this to a manager, and also the Score.text above
+            UserHighscore userHighscore = await SupabaseClient.GetUserWeeklyHighscore();
+            Highscore.text = FormatScore(userHighscore.Highscore);
         }
+    }
+
+    private string FormatScore(int value, int minLength = 6)
+    {
+        string str = value.ToString();
+        if (str.Length < minLength) {
+            int paddingLength = minLength - str.Length;
+            string padding = new string('0', paddingLength);
+            return padding + str;
+        }
+
+        return str;
     }
 }

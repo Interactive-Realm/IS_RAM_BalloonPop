@@ -11,7 +11,7 @@ public class Profile : BaseModel
 {
     [PrimaryKey("user_id")]
     [JsonProperty("user_id")]
-    public string Id { get; set; }
+    public string UserId { get; set; }
 
     [Column("email")]
     [JsonProperty("email")]
@@ -28,10 +28,6 @@ public class Profile : BaseModel
     [Column("last_name")]
     [JsonProperty("last_name")]
     public string LastName { get; set; }
-
-    [Column("highscore")]
-    [JsonProperty("highscore")]
-    public int Highscore { get; set; }
 }
 
 public class ProfileWrapper

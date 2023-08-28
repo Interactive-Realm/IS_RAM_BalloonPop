@@ -10,6 +10,7 @@ using Client = Supabase.Client;
 using Postgrest.Exceptions;
 using Newtonsoft.Json;
 using Supabase.Interfaces;
+using System.IO;
 
 public class SupabaseClient
 {
@@ -57,31 +58,55 @@ public class SupabaseClient
         await Instance.Auth.SignOut();
     }
 
-    public static async Task<List<Profile>> GetTopHighscores(int limit)
+    public static async Task<List<UserHighscore>> GetHighscores(int number_of_rows)
     {
-        ModeledResponse<Profile> response = await Instance
-            .From<Profile>()
-            .Order("highscore", Postgrest.Constants.Ordering.Descending)
-            .Limit(limit)
-            .Get();
-        return response.Models;
+        BaseResponse response = await Instance.Rpc("get_highscores", new Dictionary<string, object> {
+            { "number_of_rows", number_of_rows }
+        });
+        return JsonUtility.FromJson<List<UserHighscore>>(response.Content);
+    }
+
+    public static async Task<List<UserHighscore>> GetWeeklyHighscores(int number_of_rows, string date = null)
+    {
+        // Get current date if null
+        if (date == null)
+        {
+            date = DateTime.Now.ToString("YYYY-MM-DD");
+        }
+
+        BaseResponse response = await Instance.Rpc("get_weekly_highscores", new Dictionary<string, object> {
+            { "number_of_rows", number_of_rows },
+            { "score_date", date }
+        });
+        return JsonUtility.FromJson<List<UserHighscore>>(response.Content);
+    }
+
+    public static async Task<UserHighscore> GetUserHighscore()
+    {
+        BaseResponse response = await Instance.Rpc("get_user_highscore", null);
+        return JsonUtility.FromJson<UserHighscore>(response.Content);
+    }
+
+    public static async Task<UserHighscore> GetUserWeeklyHighscore(string date = null)
+    {
+        // Get current date if null
+        if (date == null)
+        {
+            date = DateTime.Now.ToString("YYYY-MM-DD");
+        }
+
+        BaseResponse response = await Instance.Rpc("get_user_weekly_highscores", new Dictionary<string, object> {
+            { "score_date", date }
+        });
+        return JsonUtility.FromJson<UserHighscore>(response.Content);
     }
 
     public static async Task<Profile> GetUserProfile()
     {
         ModeledResponse<Profile> response = await Instance
             .From<Profile>()
-            .Where(x => x.Id == Instance.Auth.CurrentUser.Id)
+            .Where(x => x.UserId == Instance.Auth.CurrentUser.Id)
             .Get();
         return response.Model;
-    }
-
-    public static async void UpdateHighscore(int highscore)
-    {
-        await Instance
-            .From<Profile>()
-            .Where(x => x.Id == Instance.Auth.CurrentSession.User.Id)
-            .Set(x => x.Highscore, highscore)
-            .Update();
     }
 }
