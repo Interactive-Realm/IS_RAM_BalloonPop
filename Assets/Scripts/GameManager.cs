@@ -43,9 +43,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Timer time;
     [SerializeField]
-    private Spawner spawner;
-    [SerializeField]
     private Points points;
+
+    
 
     GameObject LoginScreen;
     GameObject EndScreen;
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     {
 
         //Game Initial State
-        UpdateGameState(GameState.Login);
+        UpdateGameState(GameState.GameStart);
 
     }
 
@@ -122,7 +122,6 @@ public class GameManager : MonoBehaviour
     public void HandleStartRound()
     {
         Destroy(LoginScreen);
-        spawner.gameObject.SetActive(true);
         time.timeIsRunning = true;
     }
 
@@ -138,7 +137,7 @@ public class GameManager : MonoBehaviour
 
     public void HandleEndGame()
     {
-        spawner.gameObject.SetActive(false);
+        //spawner.gameObject.SetActive(false);
         EndScreen = Instantiate(Resources.Load<GameObject>("Prefabs/UI/EndScreen"), canvas.transform);
     }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Balloon : MonoBehaviour
 {
     [SerializeField]
-    private float speed;
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +17,7 @@ public class Balloon : MonoBehaviour
     void Update()
     {
         transform.position += Vector3.up * speed * Time.deltaTime;
+        Debug.Log(speed);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

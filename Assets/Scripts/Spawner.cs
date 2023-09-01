@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
     private Vector2 screenBounds;
     private float objectWidth;
     private float objectHeight;
-    private float currentTime;
+    public float currentTime;
 
     private Vector3 viewPos;
 
@@ -33,13 +33,13 @@ public class Spawner : MonoBehaviour
 
     void LateUpdate()
     {
-        currentTime -= Time.deltaTime;
+        /*currentTime -= Time.deltaTime;
         if(currentTime <= 0)
         {
             SelectWave();
-        }
+        }*/
     }
-    void SelectWave()
+    public void SelectWave()
     {
         currentTime = 0.5f;
         Vector3 test = new Vector3(Random.Range(screenBounds.x,- screenBounds.x), -screenBounds.y, 0);
