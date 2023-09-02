@@ -123,51 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &257807454
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 257807456}
-  - component: {fileID: 257807455}
-  m_Layer: 0
-  m_Name: Spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &257807455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 257807454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c65652ce91666dc4b85a923698d5fbc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefab: {fileID: 4160341795056884644, guid: 4050ab689610fc044ac9627e7dc1b31b, type: 3}
---- !u!4 &257807456
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 257807454}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.200332, y: 222.07004, z: -4667.1045}
-  m_LocalScale: {x: 51.899998, y: 51.899998, z: 51.899998}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 394616225}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &394616224
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,8 +152,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 257807456}
+  m_Children: []
   m_Father: {fileID: 462047169}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -355,7 +309,6 @@ MonoBehaviour:
   State: 0
   canvas: {fileID: 1340188155}
   time: {fileID: 1340188152}
-  spawner: {fileID: 257807455}
   points: {fileID: 1340188157}
 --- !u!1 &462047168
 GameObject:
@@ -396,6 +349,66 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &600433105
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 600433107}
+  - component: {fileID: 600433106}
+  m_Layer: 0
+  m_Name: WaveGameplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &600433106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600433105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2770da0239770464ba09a24dcc8c7a0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  balloonScript: {fileID: 7682758178594119417, guid: 4050ab689610fc044ac9627e7dc1b31b, type: 3}
+  time: 0
+  slowSpawnInterval: 0
+  fasterSpawnInterval: 0.4
+  fastestSpawnInterval: 0.2
+  slowBalloonSpawnCount: 30
+  fasterBalloonSpawnCount: 50
+  fastestBalloonSpawnCount: 50
+  waveTime1: 10
+  waveTime2: 5
+  balloonPrefab: {fileID: 4160341795056884644, guid: 4050ab689610fc044ac9627e7dc1b31b, type: 3}
+  currentTime: 0
+  currentBalloonsSpawnedCount: 0
+  slow: 1
+  faster: 1
+  fastest: 1
+--- !u!4 &600433107
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600433105}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.3488094, y: 5.7036967, z: -0.07569352}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1023563257
 GameObject:
   m_ObjectHideFlags: 0
