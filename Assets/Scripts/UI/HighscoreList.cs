@@ -1,18 +1,22 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Postgrest.Responses;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class HighscoreList : MonoBehaviour
 {
     public GameObject HighscoreItemPrefab;
+    public bool ShowWeeklyHighscores = true;
+    public int NumberOfRows = 10;
 
-    public async void Start()
+    public void Start()
     {
-        // List<Profile> profiles =  await SupabaseClient.GetTopTenHighscores();
-        List<Profile> profiles = await SupabaseClient.GetTopHighscores(10);
+        CreateHighscoreItems();
+    }
+
+    private async void CreateHighscoreItems()
+    {
+        // Get highscores
+        List<UserHighscore> highscores = await GetHighscores();
 
         // Delete children
         List<GameObject> children = new List<GameObject>();
@@ -20,26 +24,24 @@ public class HighscoreList : MonoBehaviour
         children.ForEach(child => Destroy(child));
 
         // Create highscore list items
-        if (profiles != null)
+        if (highscores != null)
         {
-            for (int i = 0; i < profiles.Count; i++)
+            for (int i = 0; i < highscores.Count; i++)
             {
-                Profile profile = profiles[i];
-
+                UserHighscore userHighscore = highscores[i];
                 GameObject itemObject = Instantiate(HighscoreItemPrefab, transform);
                 HighscoreItem item = itemObject.GetComponent<HighscoreItem>();
 
-                string name = $"{i + 1}: {profile.FirstName} {profile.LastName}";
-                item.SetInformation(name, profile.Highscore, SupabaseClient.Instance.Auth.CurrentUser?.Id == profile.Id);
+                string name = $"{i + 1}: {userHighscore.first_name} {userHighscore.last_name}";
+                item.SetInformation(name, userHighscore.highscore, SupabaseClient.Instance.Auth.CurrentUser?.Id == userHighscore.user_id);
             }
         }
-        
 
         // Resize to fit children
         ResizeParentToChildren();
     }
 
-    public void ResizeParentToChildren()
+    private void ResizeParentToChildren()
     {
         RectTransform parentRectTransform = GetComponent<RectTransform>();
         float newHeight = 0f;
@@ -59,5 +61,15 @@ public class HighscoreList : MonoBehaviour
         Vector2 newSize = parentRectTransform.sizeDelta;
         newSize.y = newHeight;
         parentRectTransform.sizeDelta = newSize;
+    }
+
+    private async Task<List<UserHighscore>> GetHighscores()
+    {
+        if (ShowWeeklyHighscores)
+        {
+            return await SupabaseClient.GetWeeklyHighscores(NumberOfRows);
+        }
+
+        return await SupabaseClient.GetHighscores(NumberOfRows);
     }
 }

@@ -12,7 +12,7 @@ public class HighscoreItem : MonoBehaviour
     public void SetInformation(string username, int highscore, bool currentUser)
     {
         Username.text = username;
-        Highscore.text = highscore.ToString();
+        Highscore.text = Utils.FormatScore(highscore);
 
         if (currentUser)
         {

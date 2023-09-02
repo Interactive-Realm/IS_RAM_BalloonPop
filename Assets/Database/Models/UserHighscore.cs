@@ -1,23 +1,17 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
+[Serializable]
 public class UserHighscore
 {
-    [JsonProperty("user_id")]
-    public string UserId { get; set; }
-
-    [JsonProperty("first_name")]
-    public string FirstName { get; set; }
-
-    [JsonProperty("last_name")]
-    public string LastName { get; set; }
-
-    [JsonProperty("highscore")]
-    public int Highscore { get; set; }
+    public string user_id;
+    public string first_name;
+    public string last_name;
+    public int highscore;
 }
 
+[Serializable]
 public class UserHighscoreWrapper
 {
-    public List<UserHighscore> UserHighscores { get; set; }
+    public List<UserHighscore> Items;
 }

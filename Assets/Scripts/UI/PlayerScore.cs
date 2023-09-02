@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,32 +5,20 @@ public class PlayerScore : MonoBehaviour
 {
     public TMP_Text Score;
     public TMP_Text Highscore;
+    public int MinScoreLength = 6;
 
     async void Start()
     {
-        Score.text = "000000"; // TODO - Set score
+        Score.text = "SET ME"; // TODO - Set score
 
-        if (SupabaseClient.Instance.Auth.CurrentUser == null)
+        if (SupabaseClient.IsUserSignedIn())
         {
-            Highscore.text = "0000000";
+            Highscore.text = new string('0', MinScoreLength);
         }
         else
         {
-            // TODO - Maybe move this to a manager, and also the Score.text above
             UserHighscore userHighscore = await SupabaseClient.GetUserWeeklyHighscore();
-            Highscore.text = FormatScore(userHighscore.Highscore);
+            Highscore.text = Utils.FormatScore(userHighscore.highscore, MinScoreLength);
         }
-    }
-
-    private string FormatScore(int value, int minLength = 6)
-    {
-        string str = value.ToString();
-        if (str.Length < minLength) {
-            int paddingLength = minLength - str.Length;
-            string padding = new string('0', paddingLength);
-            return padding + str;
-        }
-
-        return str;
     }
 }

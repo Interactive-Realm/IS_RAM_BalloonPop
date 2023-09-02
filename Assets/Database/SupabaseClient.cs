@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
 using Supabase.Gotrue;
 using Postgrest.Responses;
 using UnityEngine;
 using Client = Supabase.Client;
-using Postgrest.Exceptions;
-using Newtonsoft.Json;
-using Supabase.Interfaces;
-using System.IO;
 
 public class SupabaseClient
 {
@@ -48,7 +42,7 @@ public class SupabaseClient
         return await Instance.Auth.SignUp(email, password, options);
     }
 
-    public static async Task<Session?> SignInUser(string email, string password)
+    public static async Task<Session> SignInUser(string email, string password)
     {
         return await Instance.Auth.SignInWithPassword(email, password);
     }
@@ -58,12 +52,12 @@ public class SupabaseClient
         await Instance.Auth.SignOut();
     }
 
-    public static async Task<List<UserHighscore>> GetHighscores(int number_of_rows)
+    public static async Task<List<UserHighscore>> GetHighscores(int numberOfRows)
     {
         BaseResponse response = await Instance.Rpc("get_highscores", new Dictionary<string, object> {
-            { "number_of_rows", number_of_rows }
+            { "number_of_rows", numberOfRows }
         });
-        return JsonUtility.FromJson<List<UserHighscore>>(response.Content);
+        return ProcessUserHighscoreResponse(response);
     }
 
     public static async Task<List<UserHighscore>> GetWeeklyHighscores(int number_of_rows, string date = null)
@@ -71,20 +65,20 @@ public class SupabaseClient
         // Get current date if null
         if (date == null)
         {
-            date = DateTime.Now.ToString("YYYY-MM-DD");
+            date = Utils.GetFormattedDate(DateTime.Now);
         }
 
         BaseResponse response = await Instance.Rpc("get_weekly_highscores", new Dictionary<string, object> {
             { "number_of_rows", number_of_rows },
             { "score_date", date }
         });
-        return JsonUtility.FromJson<List<UserHighscore>>(response.Content);
+        return ProcessUserHighscoreResponse(response);
     }
 
     public static async Task<UserHighscore> GetUserHighscore()
     {
         BaseResponse response = await Instance.Rpc("get_user_highscore", null);
-        return JsonUtility.FromJson<UserHighscore>(response.Content);
+        return ProcessUserSingleUserHighscoreResponse(response);
     }
 
     public static async Task<UserHighscore> GetUserWeeklyHighscore(string date = null)
@@ -92,13 +86,13 @@ public class SupabaseClient
         // Get current date if null
         if (date == null)
         {
-            date = DateTime.Now.ToString("YYYY-MM-DD");
+            date = Utils.GetFormattedDate(DateTime.Now);
         }
 
-        BaseResponse response = await Instance.Rpc("get_user_weekly_highscores", new Dictionary<string, object> {
+        BaseResponse response = await Instance.Rpc("get_user_weekly_highscore", new Dictionary<string, object> {
             { "score_date", date }
         });
-        return JsonUtility.FromJson<UserHighscore>(response.Content);
+        return ProcessUserSingleUserHighscoreResponse(response);
     }
 
     public static async Task<Profile> GetUserProfile()
@@ -108,5 +102,44 @@ public class SupabaseClient
             .Where(x => x.UserId == Instance.Auth.CurrentUser.Id)
             .Get();
         return response.Model;
+    }
+
+    public static bool IsUserSignedIn()
+    {
+        return Instance.Auth.CurrentUser != null;
+    }
+
+    public static User CurrentUser()
+    {
+        return Instance.Auth.CurrentUser;
+    }
+
+    public static async Task<bool> InsertHighscore(int score)
+    {
+        try
+        {
+            // Insert record
+            ModeledResponse<Highscore> response = await Instance.From<Highscore>().Insert(new Highscore
+            {
+                Score = score
+            });
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    private static List<UserHighscore> ProcessUserHighscoreResponse(BaseResponse response)
+    {
+        UserHighscoreWrapper highscoresWrapper = JsonUtility.FromJson<UserHighscoreWrapper>("{\"Items\": " + response.Content + "}");
+        return highscoresWrapper.Items;
+    }
+
+    private static UserHighscore ProcessUserSingleUserHighscoreResponse(BaseResponse response)
+    {
+        return JsonUtility.FromJson<UserHighscore>(response.Content);
     }
 }
