@@ -71,10 +71,25 @@ public class UIManager : MonoBehaviour
         currCountdownValue = countdownValue;
         while (currCountdownValue >= 0)
         {
-            countdownText.text = currCountdownValue.ToString();
-            Debug.Log("Countdown: " + currCountdownValue);
-            yield return new WaitForSeconds(1.0f);
-            currCountdownValue--;
+            if(currCountdownValue >= 1)
+            {
+                countdownText.text = currCountdownValue.ToString();
+                Debug.Log("Countdown: " + currCountdownValue);
+                AudioManager.Instance.aSourceAM.PlayOneShot(AudioManager.Instance.countdownBeep);
+                AudioManager.Instance.aSourceAM.pitch = 0.8f;
+                yield return new WaitForSeconds(1.0f);
+                currCountdownValue--;
+            }
+            else
+            {
+                countdownText.text = currCountdownValue.ToString();
+                Debug.Log("Countdown: " + currCountdownValue);
+                AudioManager.Instance.aSourceAM.PlayOneShot(AudioManager.Instance.countdownBeep);
+                AudioManager.Instance.aSourceAM.pitch = 1.6f;
+                yield return new WaitForSeconds(1.0f);
+                currCountdownValue--;
+            }
+            
         }
         GameManager.Instance.UpdateGameState(GameState.GameStart);
     }

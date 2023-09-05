@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         waveGamePlay.SetActive(false);
 
         //Game Initial State
-        UpdateGameState(GameState.SignUp);
+        UpdateGameState(GameState.CountDown);
     }
 
     public void UpdateGameState(GameState newState)
