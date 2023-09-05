@@ -22,7 +22,7 @@ public class SignInView : View
             await SupabaseClient.SignInUser(Email.Text, Password.Text);
             ResetInput();
             Debug.Log("Logged In");
-            GameManager.Instance.UpdateGameState(GameState.GameStart);
+            GameManager.Instance.UpdateGameState(GameState.CountDown);
         }
         catch (GotrueException e)
         {

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class WaveGameplay : MonoBehaviour
 {
@@ -45,9 +47,14 @@ public class WaveGameplay : MonoBehaviour
     public bool faster;
     public bool fastest;
 
+    public float countdownTimer;
+    public float currCountdownValue;
+    public TextMeshProUGUI countdownText;
+
 
     private void Start()
     {
+
         balloonScript.speed = slowSpeed;
         //spawnFactor
 
@@ -67,7 +74,7 @@ public class WaveGameplay : MonoBehaviour
     {
         time += Time.deltaTime;
 
-        if((time > 10 && time < 20) || (time > 30 && time < 40))
+        if ((time > 10 && time < 20) || (time > 30 && time < 40))
         {
             balloonScript.speed = fasterSpeed;
             if (faster)
@@ -77,12 +84,12 @@ public class WaveGameplay : MonoBehaviour
                 faster = false;
                 slow = true;
             }
-            
+
         }
-        else if(time > 40)
+        else if (time > 40)
         {
             balloonScript.speed = fastestSpeed;
-            if(fastest)
+            if (fastest)
             {
                 Debug.Log("fastest");
                 StartCoroutine(SpawnBalloonsFastest(fastestSpawnInterval, fastestBalloonSpawnCount));
@@ -99,13 +106,17 @@ public class WaveGameplay : MonoBehaviour
                 slow = false;
                 faster = true;
             }
-            
         }
+        
 
         Vector3 viewPos = transform.position;
         viewPos.x = Mathf.Clamp(viewPos.x, screenBounds.x + objectWidth, screenBounds.x * -1 - objectWidth);
         viewPos.y = Mathf.Clamp(viewPos.y, screenBounds.y + objectHeight, screenBounds.y - 1 - objectHeight);
     }
+
+    
+
+
 
     IEnumerator SpawnBalloonsSlow(float spawnInterval, float balloonCount)
     {

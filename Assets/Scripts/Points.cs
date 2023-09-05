@@ -12,6 +12,7 @@ public class Points : MonoBehaviour
     void Start()
     {
         timeIsRunning = true;
+        pointsText.text = "Score: " + _points.GetComponent<Touch>()._points.ToString();
     }
 
     // Update is called once per frame
@@ -35,6 +36,6 @@ public class Points : MonoBehaviour
     }
     void DisplayPoints()
     {
-        pointsText.text = _points.GetComponent<Touch>()._points.ToString();
+        pointsText.text = "Score: " + _points.GetComponent<Touch>()._points.ToString();
     }
 }

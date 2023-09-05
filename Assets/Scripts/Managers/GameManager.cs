@@ -15,6 +15,7 @@ public enum GameState
     Playing,
     Paused,
     GameEnd,
+    CountDown,
 }
 
 // Game Manager
@@ -59,21 +60,14 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject); 
     }
 
-    void Update()
-    {
-        if(time.timeIsRunning == false)
-        {
-            
-        }
-    }
-
 
     void Start()
     {
+        // Disable gameplay
+        waveGamePlay.SetActive(false);
 
         //Game Initial State
         UpdateGameState(GameState.SignUp);
-        waveGamePlay.SetActive(false);
     }
 
     public void UpdateGameState(GameState newState)
@@ -89,7 +83,9 @@ public class GameManager : MonoBehaviour
             case GameState.Login:
                 HandleLogin();
                 break;
-
+            case GameState.CountDown:
+                HandleCountdown();
+                break;
             case GameState.GameStart:
                 HandleStartRound();
                 break;
@@ -118,10 +114,13 @@ public class GameManager : MonoBehaviour
     {
         LoginScreen = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Authentication"), canvas.transform);
     }
-
-    public void HandleStartRound()
+    public void HandleCountdown()
     {
         Destroy(LoginScreen);
+    }
+    public void HandleStartRound()
+    {
+       
         time.timeIsRunning = true;
         waveGamePlay.SetActive(true);
     }
