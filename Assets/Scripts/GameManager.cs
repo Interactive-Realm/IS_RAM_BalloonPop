@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Points points;
 
-    
+    public GameObject waveGamePlay;
 
     GameObject LoginScreen;
     GameObject EndScreen;
@@ -72,8 +72,8 @@ public class GameManager : MonoBehaviour
     {
 
         //Game Initial State
-        UpdateGameState(GameState.GameStart);
-
+        UpdateGameState(GameState.SignUp);
+        waveGamePlay.SetActive(false);
     }
 
     public void UpdateGameState(GameState newState)
@@ -123,6 +123,7 @@ public class GameManager : MonoBehaviour
     {
         Destroy(LoginScreen);
         time.timeIsRunning = true;
+        waveGamePlay.SetActive(true);
     }
 
     public void HandlePlayingGame()

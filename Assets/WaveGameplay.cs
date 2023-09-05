@@ -21,6 +21,9 @@ public class WaveGameplay : MonoBehaviour
     public float slowBalloonSpawnCount;
     public float fasterBalloonSpawnCount;
     public float fastestBalloonSpawnCount;
+    public float slowSpeed;
+    public float fasterSpeed;
+    public float fastestSpeed;
     public float waveTime1;
     public float waveTime2;
 
@@ -45,7 +48,7 @@ public class WaveGameplay : MonoBehaviour
 
     private void Start()
     {
-        balloonScript.speed = 4;
+        balloonScript.speed = slowSpeed;
         //spawnFactor
 
 
@@ -66,7 +69,7 @@ public class WaveGameplay : MonoBehaviour
 
         if((time > 10 && time < 20) || (time > 30 && time < 40))
         {
-            balloonScript.speed = 8;
+            balloonScript.speed = fasterSpeed;
             if (faster)
             {
                 Debug.Log("faster");
@@ -78,7 +81,7 @@ public class WaveGameplay : MonoBehaviour
         }
         else if(time > 40)
         {
-            balloonScript.speed = 12;
+            balloonScript.speed = fastestSpeed;
             if(fastest)
             {
                 Debug.Log("fastest");
@@ -88,7 +91,7 @@ public class WaveGameplay : MonoBehaviour
         }
         else
         {
-            balloonScript.speed = 4;
+            balloonScript.speed = slowSpeed;
             if (slow)
             {
                 Debug.Log("slow");
