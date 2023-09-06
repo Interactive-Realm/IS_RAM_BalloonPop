@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Postgrest.Models;
 using Postgrest.Attributes;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 using Newtonsoft.Json;
 
 [Table("profiles")]
